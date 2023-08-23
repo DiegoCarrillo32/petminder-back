@@ -1,7 +1,7 @@
 
 const express = require("express");
 const { v4: uuidv4 } = require('uuid');
-const { addOrUpdateUser, createPetFeeder, getUserByUserAndPassword } = require("../controllers/user_controller");
+const { addOrUpdateUser, createPetFeeder, getUserByUserAndPassword, getFeederByUserAndPassword } = require("../controllers/user_controller");
 const router = express.Router();
 // TODO: Agregra middleware para evitar validar por el mismo campo todo el tiempo
 /**
@@ -54,6 +54,16 @@ router.get("/login", async function(req, res) {
 router.get("/register-feeder", async function (req, res) {
   const {username, password, user_id} = req.body
   await createPetFeeder(password, username, user_id) // crea un pet feeder para el usuario
+});
+
+router.get("/login-feeder", async function (req, res) {
+  const {username, password} = req.body
+  const result = await getFeederByUserAndPassword(password, username) // crea un pet feeder para el usuario
+  if(result.success){
+    return res.status(201).json(result)
+  } else {
+    return res.status(404).json(result)
+  }
 });
 
 module.exports = router;

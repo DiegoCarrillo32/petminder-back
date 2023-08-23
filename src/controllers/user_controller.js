@@ -58,9 +58,34 @@ const userInformation = async () => {
 
     return await DYNAMO_CLIENT.put(params).promise()
   }
+
+  const getFeederByUserAndPassword = async (password, username) => {
+    const params = {
+        TableName: FEEDER_TABLE_NAME,
+        FilterExpression: "username = :username",
+        ExpressionAttributeValues: {
+            ":username":username
+        },
+        Limit: 1
+    } 
+    
+    const {Items} = await DYNAMO_CLIENT.scan(params).promise()
+    if(Items[0].password === password) return {
+      msg: "Data is consistent",
+      success: true,
+      user: Items[0] // TODO: Remove password from return
+    }
+    else return {
+      msg: "Data is not consistent",
+      success: true,
+      user: null
+    }
+    
+  }
 module.exports =  {
     userInformation,
     addOrUpdateUser,
     getUserByUserAndPassword,
-    createPetFeeder
+    createPetFeeder,
+    getFeederByUserAndPassword
 }
