@@ -34,8 +34,9 @@ router.post("/register", async function (req, res) {
   })
 })
 
-router.get("/login", async function(req, res) {
+router.post("/login", async function(req, res) {
   const {password, username} = req.body
+  console.log(password, username);
   if(!password || !username ) res.status(404).json({
     msg: "Data is missing",
     success: false

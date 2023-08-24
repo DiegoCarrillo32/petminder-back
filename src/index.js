@@ -1,12 +1,15 @@
 const express = require('express')
 const bodyParser = require("body-parser")
+const cors = require("cors")
 const user_router = require('./routes/user.routes')
 const feedinglog_router = require('./routes/feeding-log.routes')
 const pet_router = require('./routes/pet.routes')
 
 const app = express()
+
 const port = 3000
 const jsonParser = bodyParser.json()
+app.use(cors())
 
 app.use("/user", jsonParser ,user_router)
 app.use("/feed_log",jsonParser, feedinglog_router)
